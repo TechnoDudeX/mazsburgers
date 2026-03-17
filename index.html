@@ -17,7 +17,6 @@
       --red: #d42c2c;
       --red-dark: #b02020;
       --cream: #faf3eb;
-      --cream-dark: #f0e6d6;
       --yellow: #ffcd26;
       --font-display: 'Lilita One', cursive;
       --font-body: 'DM Sans', sans-serif;
@@ -95,11 +94,22 @@
     /* ─── STARBURST ─── */
     .starburst {
       display: inline-flex; align-items: center; justify-content: center;
-      width: 90px; height: 90px; background: var(--yellow);
+      width: 240px; height: 240px; background: var(--yellow);
       clip-path: polygon(50% 0%, 63% 13%, 80% 5%, 80% 22%, 98% 25%, 90% 40%, 100% 55%, 85% 60%, 88% 78%, 72% 73%, 63% 90%, 52% 78%, 38% 92%, 33% 75%, 15% 80%, 20% 63%, 2% 55%, 15% 43%, 5% 28%, 22% 25%, 20% 8%, 37% 15%);
-      font-family: var(--font-display); font-size: 0.75rem;
+      font-family: var(--font-display); font-size: 1.6rem;
       text-align: center; color: var(--black); line-height: 1.1;
-      transform: rotate(-12deg); flex-shrink: 0;
+      flex-shrink: 0;
+      animation: starSpin 12s ease-in-out infinite;
+    }
+
+    .starburst-red {
+      background: var(--red); color: var(--white);
+      width: 200px; height: 200px; font-size: 1.3rem;
+    }
+
+    @keyframes starSpin {
+      0%, 100% { transform: rotate(-12deg) scale(1); }
+      50% { transform: rotate(8deg) scale(1.05); }
     }
 
     /* ─── HERO ─── */
@@ -110,9 +120,9 @@
       padding: 7rem 2rem 3rem; position: relative; overflow: hidden;
     }
 
-    .hero-deco-left, .hero-deco-right { position: absolute; top: 85px; }
-    .hero-deco-left { left: 24px; }
-    .hero-deco-right { right: 24px; transform: rotate(15deg); }
+    .hero-deco-left, .hero-deco-right { position: absolute; }
+    .hero-deco-left { left: -30px; top: 70px; }
+    .hero-deco-right { right: -30px; top: 70px; }
 
     .hero-logo {
       width: min(260px, 55vw); margin-bottom: 0.8rem;
@@ -223,7 +233,7 @@
     .menu-card {
       background: var(--cream); border: 3px solid var(--red); border-radius: 20px;
       padding: 2rem 1.5rem; text-align: center;
-      transition: transform 0.3s, box-shadow 0.3s; position: relative;
+      transition: transform 0.3s, box-shadow 0.3s;
     }
 
     .menu-card:hover {
@@ -437,7 +447,11 @@
       .hero { min-height: auto; padding: 7rem 1.5rem 2rem; }
       .hero-burger-img { width: min(300px, 85vw); }
       .hero h1 { font-size: clamp(2.6rem, 13vw, 5rem); }
-      .hero-deco-left, .hero-deco-right { display: none; }
+
+      .starburst { width: 140px; height: 140px; font-size: 1rem; }
+      .starburst-red { width: 120px; height: 120px; font-size: 0.85rem; }
+      .hero-deco-left { left: -20px; top: 70px; }
+      .hero-deco-right { right: -20px; top: 70px; }
 
       .about-inner { grid-template-columns: 1fr; text-align: center; }
       .about-photo { max-width: 340px; margin: 0 auto; }
@@ -464,7 +478,7 @@
 
   <!-- NAV -->
   <nav>
-    <img src="images/logo.png" alt="Maz's Burgers" class="nav-logo">
+    <img src="logo.png" alt="Maz's Burgers" class="nav-logo">
     <ul class="nav-links" id="navLinks">
       <li><a href="#menu" onclick="closeNav()">Menu</a></li>
       <li><a href="#seasoning" onclick="closeNav()">Seasoning</a></li>
@@ -478,12 +492,16 @@
 
   <!-- HERO -->
   <section class="hero">
-    <div class="starburst hero-deco-left">POP-UP<br>STYLE!</div>
-    <div class="starburst hero-deco-right" style="background:var(--red);color:var(--white);transform:rotate(12deg);width:80px;height:80px;font-size:0.65rem;">EST.<br>2024</div>
-    <img src="images/logo.png" alt="Maz's Burgers Logo" class="hero-logo">
+    <div class="hero-deco-left">
+      <div class="starburst">POP-UP<br>STYLE!</div>
+    </div>
+    <div class="hero-deco-right">
+      <div class="starburst starburst-red">EST.<br>2024</div>
+    </div>
+    <img src="logo.png" alt="Maz's Burgers Logo" class="hero-logo">
     <h1>Maz's<br>Burgers</h1>
     <p class="hero-tagline">Your favourite pop-up smash burger experience, serving up <em>just the classics.</em></p>
-    <img src="images/burger.png" alt="Maz's Smash Burger" class="hero-burger-img">
+    <img src="burger.png" alt="Maz's Smash Burger" class="hero-burger-img">
   </section>
 
   <!-- MARQUEE -->
@@ -507,7 +525,7 @@
   <!-- ABOUT -->
   <section class="about">
     <div class="about-inner reveal">
-      <img src="images/hero.png" alt="Chef Mazin Kanuga" class="about-photo">
+      <img src="hero.png" alt="Chef Mazin Kanuga" class="about-photo">
       <div class="about-text">
         <h2>Just a Guy Who Loves Burgers</h2>
         <p>Maz's Burgers started as a passion project — smashing patties for friends and family until the word got out. Now Chef Mazin Kanuga brings the pop-up experience to markets, events, and community gatherings across Ontario. Every burger is made fresh on cast iron, seasoned with our signature blend, and served with a whole lot of love.</p>
@@ -524,19 +542,19 @@
       </div>
       <div class="menu-grid reveal">
         <div class="menu-card">
-          <img src="images/burger.png" alt="Maz's Smash Burger">
+          <img src="burger.png" alt="Maz's Smash Burger">
           <h3>Smash Burger</h3>
           <div class="desc">Double 3oz patties, American cheese, burger sauce, brioche bun</div>
           <div class="price-tag">$8</div>
         </div>
         <div class="menu-card">
-          <img src="images/pudding.png" alt="Seemaz's Banana Pudding">
+          <img src="pudding.png" alt="Seemaz's Banana Pudding">
           <h3>Seemaz's Banana Pudding</h3>
           <div class="desc">Homemade, creamy, the perfect finish</div>
           <div class="price-tag">$6</div>
         </div>
         <div class="menu-card">
-          <img src="images/seasoning.png" alt="Maz Burger Seasoning">
+          <img src="seasoning.png" alt="Maz Burger Seasoning">
           <h3>Burger Seasoning</h3>
           <div class="desc">Our signature blend — all proceeds go to charity ❤️</div>
           <div class="price-tag">$10</div>
@@ -554,7 +572,7 @@
         <p>The secret behind every smash.</p>
       </div>
       <div class="seasoning-content reveal">
-        <img src="images/seasoning.png" alt="Maz Burger Seasoning Bottle" class="seasoning-img">
+        <img src="seasoning.png" alt="Maz Burger Seasoning Bottle" class="seasoning-img">
         <div class="seasoning-info">
           <h3>Bring the Pop-Up Home</h3>
           <p>The same signature seasoning blend we use on every smash burger at the pop-up. Crafted to bring that perfect crust and flavour — whether you're cooking on cast iron at home or firing up the grill.</p>
@@ -643,7 +661,7 @@
 
   <!-- FOOTER -->
   <footer>
-    <img src="images/logo.png" alt="Maz's Burgers" class="footer-logo"><br>
+    <img src="logo.png" alt="Maz's Burgers" class="footer-logo"><br>
     <div class="footer-social">
       <a href="https://instagram.com/mazsburgers" target="_blank" rel="noopener">@mazsburgers</a>
     </div>
@@ -682,12 +700,10 @@
       const el = document.createElement('div');
       el.className = 'flying-emoji';
       el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-
       const startX = Math.random() * window.innerWidth;
       const startY = Math.random() * window.innerHeight;
       el.style.left = startX + 'px';
       el.style.top = startY + 'px';
-
       const range = 300;
       el.style.setProperty('--dx1', (Math.random() * range * 2 - range) + 'px');
       el.style.setProperty('--dy1', (Math.random() * range * 2 - range) + 'px');
@@ -695,16 +711,13 @@
       el.style.setProperty('--dy2', (Math.random() * range * 2 - range) + 'px');
       el.style.setProperty('--dx3', (Math.random() * range * 2 - range) + 'px');
       el.style.setProperty('--dy3', (Math.random() * range * 2 - range) + 'px');
-
       const duration = 14 + Math.random() * 20;
       el.style.animationDuration = duration + 's';
       el.style.animationDelay = (Math.random() * -duration) + 's';
       el.style.fontSize = (18 + Math.random() * 16) + 'px';
       el.style.opacity = 0.12 + Math.random() * 0.18;
-
       document.body.appendChild(el);
     }
-
     for (let i = 0; i < 12; i++) createFlyingEmoji();
   </script>
 
