@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Maz's Burgers — Smash Burgers by Chef Mazin Kanuga</title>
+  <meta name="description" content="Maz's Burgers is a pop-up smash burger experience by Chef Mazin Kanuga. Smash burgers, banana pudding, and our signature seasoning blend.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --black: #1a1a1a;
+      --white: #fff;
+      --red: #d42c2c;
+      --red-dark: #b02020;
+      --cream: #faf3eb;
+      --cream-dark: #f0e6d6;
+      --yellow: #ffcd26;
+      --font-display: 'Lilita One', cursive;
+      --font-body: 'DM Sans', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--cream);
+      color: var(--black);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── FLYING BURGERS ─── */
+    .flying-emoji {
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      animation: flyAround linear infinite;
+    }
+
+    @keyframes flyAround {
+      0%   { transform: translate(0, 0) rotate(0deg); }
+      25%  { transform: translate(var(--dx1), var(--dy1)) rotate(90deg); }
+      50%  { transform: translate(var(--dx2), var(--dy2)) rotate(180deg); }
+      75%  { transform: translate(var(--dx3), var(--dy3)) rotate(270deg); }
+      100% { transform: translate(0, 0) rotate(360deg); }
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 0.8rem 2rem;
+      display: flex; justify-content: space-between; align-items: center;
+      background: rgba(250,243,235,0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 3px solid var(--red);
+    }
+
+    .nav-logo { height: 50px; }
+
+    .nav-links {
+      display: flex; gap: 1.8rem; list-style: none; align-items: center;
+    }
+
+    .nav-links a {
+      font-family: var(--font-display); font-size: 1rem;
+      color: var(--black); text-decoration: none; text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--red); }
+
+    .nav-cta-btn {
+      background: var(--red) !important; color: var(--white) !important;
+      padding: 0.55rem 1.4rem; border-radius: 50px;
+      transition: transform 0.2s, background 0.2s !important;
+    }
+
+    .nav-cta-btn:hover { background: var(--red-dark) !important; transform: scale(1.05); }
+
+    .mobile-toggle {
+      display: none; background: none; border: none; cursor: pointer;
+      flex-direction: column; gap: 5px;
+    }
+
+    .mobile-toggle span {
+      display: block; width: 28px; height: 3px;
+      background: var(--black); border-radius: 3px;
+    }
+
+    /* ─── STARBURST ─── */
+    .starburst {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 90px; height: 90px; background: var(--yellow);
+      clip-path: polygon(50% 0%, 63% 13%, 80% 5%, 80% 22%, 98% 25%, 90% 40%, 100% 55%, 85% 60%, 88% 78%, 72% 73%, 63% 90%, 52% 78%, 38% 92%, 33% 75%, 15% 80%, 20% 63%, 2% 55%, 15% 43%, 5% 28%, 22% 25%, 20% 8%, 37% 15%);
+      font-family: var(--font-display); font-size: 0.75rem;
+      text-align: center; color: var(--black); line-height: 1.1;
+      transform: rotate(-12deg); flex-shrink: 0;
+    }
+
+    /* ─── HERO ─── */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column; justify-content: center;
+      align-items: center; text-align: center;
+      padding: 7rem 2rem 3rem; position: relative; overflow: hidden;
+    }
+
+    .hero-deco-left, .hero-deco-right { position: absolute; top: 85px; }
+    .hero-deco-left { left: 24px; }
+    .hero-deco-right { right: 24px; transform: rotate(15deg); }
+
+    .hero-logo {
+      width: min(260px, 55vw); margin-bottom: 0.8rem;
+      animation: popIn 0.6s cubic-bezier(0.34,1.56,0.64,1) both;
+      filter: drop-shadow(0 8px 30px rgba(212,44,44,0.2));
+    }
+
+    .hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(3.2rem, 11vw, 7.5rem);
+      line-height: 0.92; color: var(--red); text-transform: uppercase;
+      animation: popIn 0.6s 0.1s cubic-bezier(0.34,1.56,0.64,1) both;
+    }
+
+    .hero-tagline {
+      font-size: 1.15rem; color: #777; margin-top: 1.2rem;
+      max-width: 400px; line-height: 1.6;
+      animation: popIn 0.6s 0.2s cubic-bezier(0.34,1.56,0.64,1) both;
+    }
+
+    .hero-tagline em {
+      font-style: italic; font-weight: 700; color: var(--black);
+      text-decoration: underline; text-decoration-color: var(--red);
+      text-underline-offset: 3px;
+    }
+
+    .hero-burger-img {
+      width: min(400px, 80vw); margin-top: 2rem;
+      animation: floatBurger 3s ease-in-out infinite, popIn 0.6s 0.3s cubic-bezier(0.34,1.56,0.64,1) both;
+      filter: drop-shadow(0 20px 40px rgba(0,0,0,0.3));
+    }
+
+    @keyframes floatBurger {
+      0%, 100% { transform: translateY(0) rotate(-1deg); }
+      50% { transform: translateY(-12px) rotate(1deg); }
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.8) translateY(20px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    /* ─── MARQUEE ─── */
+    .marquee-wrap {
+      background: var(--red); padding: 0.9rem 0; overflow: hidden; white-space: nowrap;
+      border-top: 3px solid var(--black); border-bottom: 3px solid var(--black);
+    }
+
+    .marquee-track {
+      display: inline-flex; animation: marquee 22s linear infinite;
+    }
+
+    .marquee-track span {
+      font-family: var(--font-display); font-size: 1.15rem;
+      color: var(--white); text-transform: uppercase;
+      letter-spacing: 0.06em; padding: 0 2rem;
+    }
+
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* ─── ABOUT ─── */
+    .about { padding: 5rem 2rem; display: flex; justify-content: center; }
+
+    .about-inner {
+      max-width: 900px; display: grid;
+      grid-template-columns: 1fr 1.2fr; gap: 3rem; align-items: center;
+    }
+
+    .about-photo {
+      width: 100%; border-radius: 20px;
+      border: 4px solid var(--red); box-shadow: 8px 8px 0 var(--red);
+    }
+
+    .about-text h2 {
+      font-family: var(--font-display); font-size: 2.3rem;
+      color: var(--red); text-transform: uppercase; line-height: 1.05; margin-bottom: 1rem;
+    }
+
+    .about-text p { font-size: 1.05rem; line-height: 1.8; color: #555; }
+
+    /* ─── SHARED ─── */
+    section { padding: 5rem 2rem; }
+    .container { max-width: 960px; margin: 0 auto; }
+
+    .section-header { text-align: center; margin-bottom: 3rem; }
+
+    .section-header h2 {
+      font-family: var(--font-display);
+      font-size: clamp(2.2rem, 5vw, 3.5rem);
+      color: var(--red); text-transform: uppercase; line-height: 1;
+    }
+
+    .section-header p { color: #777; margin-top: 0.5rem; font-size: 1.05rem; }
+
+    /* ─── MENU ─── */
+    .menu {
+      background: var(--white);
+      border-top: 3px solid var(--red); border-bottom: 3px solid var(--red);
+    }
+
+    .menu-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;
+    }
+
+    .menu-card {
+      background: var(--cream); border: 3px solid var(--red); border-radius: 20px;
+      padding: 2rem 1.5rem; text-align: center;
+      transition: transform 0.3s, box-shadow 0.3s; position: relative;
+    }
+
+    .menu-card:hover {
+      transform: translateY(-6px) rotate(-1deg);
+      box-shadow: 6px 6px 0 var(--red);
+    }
+
+    .menu-card img {
+      width: 180px; height: 180px; object-fit: contain;
+      margin: 0 auto 1rem; display: block;
+      filter: drop-shadow(0 6px 15px rgba(0,0,0,0.2));
+    }
+
+    .menu-card h3 {
+      font-family: var(--font-display); font-size: 1.4rem;
+      text-transform: uppercase; margin-bottom: 0.3rem;
+    }
+
+    .menu-card .desc {
+      font-size: 0.85rem; color: #888; margin-bottom: 0.8rem; line-height: 1.4;
+    }
+
+    .menu-card .price-tag {
+      display: inline-block; background: var(--red); color: var(--white);
+      font-family: var(--font-display); font-size: 1.4rem;
+      padding: 0.3rem 1.2rem; border-radius: 50px;
+    }
+
+    .menu-card .price-sub { font-size: 0.8rem; color: #999; margin-top: 0.4rem; }
+
+    /* ─── SEASONING ─── */
+    .seasoning {
+      background: var(--red); color: var(--white);
+      position: relative; overflow: hidden;
+    }
+
+    .seasoning::before {
+      content: '🔥'; position: absolute; font-size: 220px; opacity: 0.06;
+      top: -50px; right: -30px; transform: rotate(15deg);
+    }
+
+    .seasoning .section-header h2 { color: var(--white); }
+    .seasoning .section-header p { color: rgba(255,255,255,0.7); }
+
+    .seasoning-content {
+      display: grid; grid-template-columns: auto 1fr;
+      gap: 3rem; align-items: center; max-width: 800px; margin: 0 auto;
+    }
+
+    .seasoning-img {
+      width: 220px;
+      filter: drop-shadow(0 10px 30px rgba(0,0,0,0.4));
+      animation: floatBurger 4s ease-in-out infinite;
+      border-radius: 12px;
+    }
+
+    .seasoning-info h3 {
+      font-family: var(--font-display); font-size: 1.8rem; margin-bottom: 0.8rem;
+    }
+
+    .seasoning-info p { line-height: 1.7; opacity: 0.9; margin-bottom: 1.5rem; }
+
+    .seasoning-prices { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+    .sp-card {
+      background: rgba(0,0,0,0.2); border-radius: 16px;
+      padding: 1.2rem 2rem; text-align: center;
+      border: 2px solid rgba(255,255,255,0.15);
+    }
+
+    .sp-card .qty {
+      font-family: var(--font-display); font-size: 0.9rem;
+      letter-spacing: 0.1em; opacity: 0.8; margin-bottom: 0.3rem;
+    }
+
+    .sp-card .price { font-family: var(--font-display); font-size: 2.2rem; }
+
+    .seasoning-charity {
+      margin-top: 1.5rem; font-size: 0.95rem; opacity: 0.75; font-style: italic;
+    }
+
+    /* ─── HOW TO ─── */
+    .howto { background: var(--cream); }
+
+    .howto-intro {
+      text-align: center; max-width: 520px; margin: -1rem auto 2.5rem;
+      color: #777; line-height: 1.6;
+    }
+
+    .howto-ingredients {
+      background: var(--white); border: 3px solid var(--red);
+      border-radius: 20px; padding: 2rem; margin-bottom: 2.5rem;
+      box-shadow: 5px 5px 0 var(--red);
+    }
+
+    .howto-ingredients h3 {
+      font-family: var(--font-display); font-size: 1.3rem;
+      color: var(--red); text-transform: uppercase; margin-bottom: 0.5rem;
+    }
+
+    .howto-ingredients ul {
+      list-style: none; display: flex; flex-wrap: wrap; gap: 0.4rem 1.5rem;
+    }
+
+    .howto-ingredients li { font-size: 0.95rem; color: #666; }
+    .howto-ingredients li::before { content: '• '; color: var(--red); font-weight: bold; }
+
+    .steps { display: flex; flex-direction: column; gap: 0; }
+
+    .step {
+      display: flex; gap: 1.5rem; padding: 1.5rem 0;
+      border-bottom: 2px dashed rgba(0,0,0,0.08); align-items: center;
+    }
+
+    .step:last-of-type { border-bottom: none; }
+
+    .step-num {
+      width: 56px; height: 56px; background: var(--red); color: var(--white);
+      font-family: var(--font-display); font-size: 1.5rem; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+
+    .step-text { font-size: 1.05rem; line-height: 1.6; color: #555; }
+
+    .step-final {
+      text-align: center; padding: 2rem 0 0;
+      font-family: var(--font-display); font-size: 2.2rem; color: var(--red);
+    }
+
+    /* ─── NOTIFY ─── */
+    .notify {
+      background: var(--black); color: var(--white);
+      text-align: center; position: relative; overflow: hidden;
+    }
+
+    .notify::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 0%, rgba(212,44,44,0.2) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .notify .section-header h2 { color: var(--yellow); }
+    .notify .section-header p { color: rgba(255,255,255,0.6); }
+
+    .notify-form {
+      display: flex; max-width: 480px; margin: 0 auto;
+      border-radius: 50px; overflow: hidden; border: 3px solid var(--red);
+    }
+
+    .notify-form input {
+      flex: 1; padding: 1rem 1.5rem; border: none;
+      font-size: 1rem; font-family: var(--font-body);
+      outline: none; background: var(--white); color: var(--black);
+    }
+
+    .notify-form button {
+      padding: 1rem 2rem; background: var(--red); color: var(--white);
+      border: none; font-family: var(--font-display); font-size: 1.1rem;
+      cursor: pointer; white-space: nowrap; text-transform: uppercase;
+      transition: background 0.2s;
+    }
+
+    .notify-form button:hover { background: var(--red-dark); }
+
+    .notify-success {
+      display: none; font-family: var(--font-display);
+      font-size: 1.5rem; color: var(--yellow); margin-top: 1rem;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--cream); text-align: center;
+      padding: 3rem 2rem; border-top: 3px solid var(--red);
+    }
+
+    .footer-logo { height: 60px; margin-bottom: 1rem; }
+
+    .footer-social a {
+      font-family: var(--font-display); font-size: 1.1rem;
+      color: var(--red); text-decoration: none; text-transform: uppercase;
+    }
+
+    .footer-social a:hover { text-decoration: underline; }
+
+    .footer-tagline {
+      font-family: var(--font-display); color: #999; font-size: 0.85rem;
+      letter-spacing: 0.15em; margin-top: 0.8rem; text-transform: uppercase;
+    }
+
+    .footer-copy { margin-top: 0.8rem; color: #aaa; font-size: 0.8rem; }
+
+    /* ─── REVEAL ─── */
+    .reveal {
+      opacity: 0; transform: translateY(30px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .nav-links.open {
+        display: flex; flex-direction: column; position: fixed; inset: 0;
+        background: rgba(250,243,235,0.98);
+        justify-content: center; align-items: center; gap: 2rem; z-index: 200;
+      }
+      .nav-links.open a { font-size: 1.5rem; color: var(--black); }
+      .mobile-toggle { display: flex; z-index: 300; }
+
+      .hero { min-height: auto; padding: 7rem 1.5rem 2rem; }
+      .hero-burger-img { width: min(300px, 85vw); }
+      .hero h1 { font-size: clamp(2.6rem, 13vw, 5rem); }
+      .hero-deco-left, .hero-deco-right { display: none; }
+
+      .about-inner { grid-template-columns: 1fr; text-align: center; }
+      .about-photo { max-width: 340px; margin: 0 auto; }
+
+      .menu-grid { grid-template-columns: 1fr; max-width: 340px; margin: 0 auto; }
+
+      .seasoning-content { grid-template-columns: 1fr; text-align: center; justify-items: center; }
+      .seasoning-img { width: 180px; }
+      .seasoning-prices { justify-content: center; }
+
+      section { padding: 3.5rem 1.5rem; }
+
+      .notify-form { flex-direction: column; border-radius: 16px; }
+      .notify-form input { border-radius: 0; }
+
+      .step { gap: 1rem; }
+      .step-num { width: 44px; height: 44px; font-size: 1.2rem; }
+
+      .howto-ingredients ul { flex-direction: column; gap: 0.3rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <img src="images/logo.png" alt="Maz's Burgers" class="nav-logo">
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#menu" onclick="closeNav()">Menu</a></li>
+      <li><a href="#seasoning" onclick="closeNav()">Seasoning</a></li>
+      <li><a href="#howto" onclick="closeNav()">How To Maz</a></li>
+      <li><a href="#notify" class="nav-cta-btn" onclick="closeNav()">Get Notified</a></li>
+    </ul>
+    <button class="mobile-toggle" id="mobileToggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="starburst hero-deco-left">POP-UP<br>STYLE!</div>
+    <div class="starburst hero-deco-right" style="background:var(--red);color:var(--white);transform:rotate(12deg);width:80px;height:80px;font-size:0.65rem;">EST.<br>2024</div>
+    <img src="images/logo.png" alt="Maz's Burgers Logo" class="hero-logo">
+    <h1>Maz's<br>Burgers</h1>
+    <p class="hero-tagline">Your favourite pop-up smash burger experience, serving up <em>just the classics.</em></p>
+    <img src="images/burger.png" alt="Maz's Smash Burger" class="hero-burger-img">
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee-wrap">
+    <div class="marquee-track">
+      <span>🍔 Smash Burgers</span>
+      <span>🔥 Cast Iron Seared</span>
+      <span>🧂 Signature Seasoning</span>
+      <span>🍌 Seemaz's Banana Pudding</span>
+      <span>❤️ Seasoning for Charity</span>
+      <span>📍 Ontario Pop-Ups</span>
+      <span>🍔 Smash Burgers</span>
+      <span>🔥 Cast Iron Seared</span>
+      <span>🧂 Signature Seasoning</span>
+      <span>🍌 Seemaz's Banana Pudding</span>
+      <span>❤️ Seasoning for Charity</span>
+      <span>📍 Ontario Pop-Ups</span>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <section class="about">
+    <div class="about-inner reveal">
+      <img src="images/hero.png" alt="Chef Mazin Kanuga" class="about-photo">
+      <div class="about-text">
+        <h2>Just a Guy Who Loves Burgers</h2>
+        <p>Maz's Burgers started as a passion project — smashing patties for friends and family until the word got out. Now Chef Mazin Kanuga brings the pop-up experience to markets, events, and community gatherings across Ontario. Every burger is made fresh on cast iron, seasoned with our signature blend, and served with a whole lot of love.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- MENU -->
+  <section class="menu" id="menu">
+    <div class="container">
+      <div class="section-header reveal">
+        <h2>The Menu</h2>
+        <p>Simple. Fresh. Smashed to perfection.</p>
+      </div>
+      <div class="menu-grid reveal">
+        <div class="menu-card">
+          <img src="images/burger.png" alt="Maz's Smash Burger">
+          <h3>Smash Burger</h3>
+          <div class="desc">Double 3oz patties, American cheese, burger sauce, brioche bun</div>
+          <div class="price-tag">$8</div>
+        </div>
+        <div class="menu-card">
+          <img src="images/pudding.png" alt="Seemaz's Banana Pudding">
+          <h3>Seemaz's Banana Pudding</h3>
+          <div class="desc">Homemade, creamy, the perfect finish</div>
+          <div class="price-tag">$6</div>
+        </div>
+        <div class="menu-card">
+          <img src="images/seasoning.png" alt="Maz Burger Seasoning">
+          <h3>Burger Seasoning</h3>
+          <div class="desc">Our signature blend — all proceeds go to charity ❤️</div>
+          <div class="price-tag">$10</div>
+          <div class="price-sub">or 2 for $15</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEASONING -->
+  <section class="seasoning" id="seasoning">
+    <div class="container">
+      <div class="section-header reveal">
+        <h2>Maz's Burger Seasoning</h2>
+        <p>The secret behind every smash.</p>
+      </div>
+      <div class="seasoning-content reveal">
+        <img src="images/seasoning.png" alt="Maz Burger Seasoning Bottle" class="seasoning-img">
+        <div class="seasoning-info">
+          <h3>Bring the Pop-Up Home</h3>
+          <p>The same signature seasoning blend we use on every smash burger at the pop-up. Crafted to bring that perfect crust and flavour — whether you're cooking on cast iron at home or firing up the grill.</p>
+          <div class="seasoning-prices">
+            <div class="sp-card">
+              <div class="qty">1 BOTTLE</div>
+              <div class="price">$10</div>
+            </div>
+            <div class="sp-card">
+              <div class="qty">2 BOTTLES</div>
+              <div class="price">$15</div>
+            </div>
+          </div>
+          <p class="seasoning-charity">All seasoning proceeds go to charity. Seasoning for a cause. ❤️</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW TO -->
+  <section class="howto" id="howto">
+    <div class="container">
+      <div class="section-header reveal">
+        <h2>How to Make a Maz Burger</h2>
+      </div>
+      <p class="howto-intro reveal">Follow these steps and you'll be smashing like a pro in no time.</p>
+
+      <div class="howto-ingredients reveal">
+        <h3>Ingredients</h3>
+        <ul>
+          <li>Brioche bun</li>
+          <li>American cheese</li>
+          <li>Burger sauce (mayo, ketchup, mustard, dijon)</li>
+          <li>2 × 3oz beef patties</li>
+          <li>Maz Burger Seasoning</li>
+        </ul>
+        <h3 style="margin-top:1rem;">Tools</h3>
+        <ul>
+          <li>Burger press</li>
+          <li>Spatula</li>
+          <li>Parchment paper</li>
+          <li>Cast iron skillet</li>
+        </ul>
+      </div>
+
+      <div class="steps reveal">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-text">Get your cast iron hot and ready. We're talking <strong>screaming hot</strong> — you want that sear.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-text">Take your 2 patty balls and smash them with the burger press using parchment paper. Flat and thin — that's how we get the crispy edges.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-text">Lightly season with Maz Burger Seasoning. Don't overdo it — the blend does the work.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-text">Flip after 90 seconds, lightly season again, and place the American cheese on one patty. Let it melt.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-text">Toast the buns on the cast iron, sauce them up, and stack your masterpiece.</div>
+        </div>
+        <div class="step-final">Enjoy 🍔🔥</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NOTIFY -->
+  <section class="notify" id="notify">
+    <div class="container reveal">
+      <div class="section-header">
+        <h2>Don't Miss the Next Pop-Up</h2>
+        <p>Drop your email. We'll let you know when and where.</p>
+      </div>
+      <div class="notify-form" id="notifyForm">
+        <input type="email" id="emailInput" placeholder="your@email.com" required>
+        <button type="button" id="notifyBtn">Notify Me</button>
+      </div>
+      <p class="notify-success" id="notifySuccess">YOU'RE IN! SEE YOU AT THE NEXT ONE 🍔🔥</p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <img src="images/logo.png" alt="Maz's Burgers" class="footer-logo"><br>
+    <div class="footer-social">
+      <a href="https://instagram.com/mazsburgers" target="_blank" rel="noopener">@mazsburgers</a>
+    </div>
+    <p class="footer-tagline">"Just the Classics" · Est. 2024</p>
+    <p class="footer-copy">&copy; 2025 Maz's Burgers. Pop-up smash burgers by Chef Mazin Kanuga.</p>
+  </footer>
+
+  <script>
+    // Mobile nav
+    const toggle = document.getElementById('mobileToggle');
+    const links = document.getElementById('navLinks');
+    toggle.addEventListener('click', () => links.classList.toggle('open'));
+    function closeNav() { links.classList.remove('open'); }
+
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+      });
+    }, { threshold: 0.12 });
+    reveals.forEach(el => obs.observe(el));
+
+    // Notify
+    document.getElementById('notifyBtn').addEventListener('click', () => {
+      const email = document.getElementById('emailInput').value;
+      if (email && email.includes('@')) {
+        document.getElementById('notifyForm').style.display = 'none';
+        document.getElementById('notifySuccess').style.display = 'block';
+      }
+    });
+
+    // Flying burger emojis
+    const emojis = ['🍔', '🔥', '🧀', '🍔', '🔥'];
+    function createFlyingEmoji() {
+      const el = document.createElement('div');
+      el.className = 'flying-emoji';
+      el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+
+      const startX = Math.random() * window.innerWidth;
+      const startY = Math.random() * window.innerHeight;
+      el.style.left = startX + 'px';
+      el.style.top = startY + 'px';
+
+      const range = 300;
+      el.style.setProperty('--dx1', (Math.random() * range * 2 - range) + 'px');
+      el.style.setProperty('--dy1', (Math.random() * range * 2 - range) + 'px');
+      el.style.setProperty('--dx2', (Math.random() * range * 2 - range) + 'px');
+      el.style.setProperty('--dy2', (Math.random() * range * 2 - range) + 'px');
+      el.style.setProperty('--dx3', (Math.random() * range * 2 - range) + 'px');
+      el.style.setProperty('--dy3', (Math.random() * range * 2 - range) + 'px');
+
+      const duration = 14 + Math.random() * 20;
+      el.style.animationDuration = duration + 's';
+      el.style.animationDelay = (Math.random() * -duration) + 's';
+      el.style.fontSize = (18 + Math.random() * 16) + 'px';
+      el.style.opacity = 0.12 + Math.random() * 0.18;
+
+      document.body.appendChild(el);
+    }
+
+    for (let i = 0; i < 12; i++) createFlyingEmoji();
+  </script>
+
+</body>
+</html>
