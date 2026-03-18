@@ -435,7 +435,7 @@
     .reveal.visible { opacity: 1; transform: translateY(0); }
 
     /* ─── RESPONSIVE ─── */
-    @media (max-width: 768px) {
+    @media (max-width: 900px) {
       .nav-links { display: none; }
       .nav-links.open {
         display: flex; flex-direction: column; position: fixed; inset: 0;
@@ -643,10 +643,11 @@
         <h2>Don't Miss the Next Pop-Up</h2>
         <p>Drop your email and we'll tell you when and where.</p>
       </div>
-      <div class="notify-form" id="notifyForm">
-        <input type="email" id="emailInput" placeholder="your@email.com" required>
-        <button type="button" id="notifyBtn">Notify Me</button>
-      </div>
+      <form name="notify" method="POST" data-netlify="true" class="notify-form" id="notifyForm">
+        <input type="hidden" name="form-name" value="notify">
+        <input type="email" name="email" id="emailInput" placeholder="your@email.com" required>
+        <button type="submit" id="notifyBtn">Notify Me</button>
+      </form>
       <p class="notify-success" id="notifySuccess">YOU'RE IN! SEE YOU AT THE NEXT ONE 🍔🔥</p>
     </div>
   </section>
@@ -677,12 +678,23 @@
     }, { threshold: 0.12 });
     reveals.forEach(el => obs.observe(el));
 
-    // Notify
-    document.getElementById('notifyBtn').addEventListener('click', () => {
+    // Notify (Netlify form via fetch)
+    document.getElementById('notifyForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const form = e.target;
       const email = document.getElementById('emailInput').value;
       if (email && email.includes('@')) {
-        document.getElementById('notifyForm').style.display = 'none';
-        document.getElementById('notifySuccess').style.display = 'block';
+        fetch('/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams(new FormData(form)).toString()
+        }).then(() => {
+          form.style.display = 'none';
+          document.getElementById('notifySuccess').style.display = 'block';
+        }).catch(() => {
+          form.style.display = 'none';
+          document.getElementById('notifySuccess').style.display = 'block';
+        });
       }
     });
 
