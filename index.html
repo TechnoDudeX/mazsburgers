@@ -92,6 +92,8 @@
       transition: transform 0.3s, opacity 0.3s;
     }
 
+    .mobile-cta { display: none; }
+
     /* ─── STARBURST ─── */
     .starburst {
       display: inline-flex; align-items: center; justify-content: center;
@@ -438,63 +440,17 @@
     /* ─── RESPONSIVE ─── */
     @media (max-width: 900px) {
       .nav-links { display: none; }
-      .nav-links.open {
-        display: flex; flex-direction: column; position: fixed;
-        top: 0; right: 0; bottom: 0; left: 40px;
-        background: var(--white);
-        padding: 5rem 2rem 2rem;
-        align-items: flex-start; justify-content: flex-start; gap: 0;
-        z-index: 200;
-        box-shadow: -10px 0 40px rgba(0,0,0,0.15);
-        border-left: 3px solid var(--red);
-        animation: slideIn 0.25s ease-out;
+      .mobile-cta {
+        display: inline-block;
+        background: var(--red); color: var(--white);
+        padding: 0.5rem 1.2rem; border-radius: 50px;
+        font-family: var(--font-display); font-size: 0.85rem;
+        text-decoration: none; text-transform: uppercase;
+        transition: background 0.2s;
       }
-
-      @keyframes slideIn {
-        from { transform: translateX(100%); }
-        to { transform: translateX(0); }
-      }
-
-      .nav-links.open li {
-        width: 100%;
-        border-bottom: 1px solid #eee;
-      }
-
-      .nav-links.open li:last-child { border-bottom: none; }
-
-      .nav-links.open a {
-        font-size: 1.2rem; color: var(--black);
-        display: flex; justify-content: space-between; align-items: center;
-        padding: 1.3rem 0; width: 100%;
-      }
-
-      .nav-links.open a::after {
-        content: '›'; font-size: 1.6rem; color: #ccc; font-weight: 300;
-      }
-
-      .nav-links.open .nav-cta-btn {
-        margin-top: 1rem; text-align: center; justify-content: center;
-        border-radius: 50px; padding: 1rem;
-      }
-
-      .nav-links.open .nav-cta-btn::after { content: none; }
-
-      .mobile-toggle { display: flex; z-index: 300; }
-
-      .mobile-toggle.open-state span:nth-child(1) {
-        transform: rotate(45deg) translate(5px, 5px);
-      }
-      .mobile-toggle.open-state span:nth-child(2) { opacity: 0; }
-      .mobile-toggle.open-state span:nth-child(3) {
-        transform: rotate(-45deg) translate(5px, -5px);
-      }
-
-      .nav-overlay {
-        display: none; position: fixed; inset: 0;
-        background: rgba(0,0,0,0.4); z-index: 150;
-      }
-
-      .nav-overlay.active { display: block; }
+      .mobile-cta:hover { background: var(--red-dark); }
+      .mobile-toggle { display: none !important; }
+      .nav-overlay { display: none !important; }
 
       .hero { padding: 5rem 1.5rem 1rem; }
       .hero-burger-img { width: min(300px, 85vw); }
@@ -537,6 +493,7 @@
       <li><a href="#howto" onclick="closeNav()">How To Maz</a></li>
       <li><a href="#notify" class="nav-cta-btn" onclick="closeNav()">Get Notified</a></li>
     </ul>
+    <a href="#notify" class="mobile-cta" id="mobileCta">Get Notified</a>
     <button class="mobile-toggle" id="mobileToggle" aria-label="Menu">
       <span></span><span></span><span></span>
     </button>
