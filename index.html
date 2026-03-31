@@ -50,13 +50,16 @@
 
     /* ─── NAV ─── */
     nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      position: fixed; top: 0.75rem; left: 1rem; right: 1rem; z-index: 100;
       padding: 0.8rem 2rem;
       display: flex; justify-content: space-between; align-items: center;
       background: rgba(250,243,235,0.92);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
-      border-bottom: 3px solid var(--red);
+      border: 3px solid var(--red);
+      border-radius: 50px;
+      box-shadow: 0 4px 20px rgba(212,44,44,0.1);
+      transition: box-shadow 0.3s;
     }
 
     .nav-logo { height: 50px; }
@@ -72,6 +75,7 @@
     }
 
     .nav-links a:hover { color: var(--red); }
+    .nav-links a:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; border-radius: 4px; }
 
     .nav-cta-btn {
       background: var(--red) !important; color: var(--white) !important;
@@ -80,6 +84,7 @@
     }
 
     .nav-cta-btn:hover { background: var(--red-dark) !important; transform: scale(1.05); }
+    .nav-cta-btn:focus-visible { outline: 2px solid var(--yellow); outline-offset: 3px; }
 
     .mobile-toggle {
       display: none; background: none; border: none; cursor: pointer;
@@ -141,7 +146,7 @@
     }
 
     .hero-tagline {
-      font-size: 1.15rem; color: #777; margin-top: 1.2rem;
+      font-size: 1.15rem; color: #666; margin-top: 1.2rem;
       max-width: 400px; line-height: 1.6;
       animation: popIn 0.6s 0.2s cubic-bezier(0.34,1.56,0.64,1) both;
     }
@@ -207,7 +212,7 @@
       color: var(--red); text-transform: uppercase; line-height: 1.05; margin-bottom: 1rem;
     }
 
-    .about-text p { font-size: 1.05rem; line-height: 1.8; color: #555; }
+    .about-text p { font-size: 1.05rem; line-height: 1.8; color: #4a4a4a; }
 
     /* ─── SHARED ─── */
     section { padding: 5rem 2rem; }
@@ -221,7 +226,7 @@
       color: var(--red); text-transform: uppercase; line-height: 1;
     }
 
-    .section-header p { color: #777; margin-top: 0.5rem; font-size: 1.05rem; }
+    .section-header p { color: #666; margin-top: 0.5rem; font-size: 1.05rem; }
 
     /* ─── MENU ─── */
     .menu {
@@ -240,6 +245,8 @@
       transition: transform 0.3s, box-shadow 0.3s;
     }
 
+    .menu-card { cursor: pointer; }
+
     .menu-card:hover {
       transform: translateY(-6px) rotate(-1deg);
       box-shadow: 6px 6px 0 var(--red);
@@ -249,6 +256,17 @@
       width: 180px; height: 180px; object-fit: contain;
       margin: 0 auto 1rem; display: block;
       filter: drop-shadow(0 6px 15px rgba(0,0,0,0.2));
+      transition: transform 0.3s;
+    }
+
+    .menu-card:hover img {
+      animation: wiggle 0.4s ease-in-out;
+    }
+
+    @keyframes wiggle {
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(-5deg); }
+      75% { transform: rotate(5deg); }
     }
 
     .menu-card h3 {
@@ -257,7 +275,7 @@
     }
 
     .menu-card .desc {
-      font-size: 0.85rem; color: #888; margin-bottom: 0.8rem; line-height: 1.4;
+      font-size: 0.85rem; color: #666; margin-bottom: 0.8rem; line-height: 1.4;
     }
 
     .menu-card .price-tag {
@@ -306,6 +324,14 @@
       background: rgba(0,0,0,0.2); border-radius: 16px;
       padding: 1.2rem 2rem; text-align: center;
       border: 2px solid rgba(255,255,255,0.15);
+      cursor: pointer;
+      transition: transform 0.25s, background 0.25s, border-color 0.25s;
+    }
+
+    .sp-card:hover {
+      transform: translateY(-4px) scale(1.03);
+      background: rgba(0,0,0,0.3);
+      border-color: rgba(255,255,255,0.35);
     }
 
     .sp-card .qty {
@@ -342,14 +368,21 @@
       list-style: none; display: flex; flex-wrap: wrap; gap: 0.4rem 1.5rem;
     }
 
-    .howto-ingredients li { font-size: 0.95rem; color: #666; }
+    .howto-ingredients li { font-size: 0.95rem; color: #555; }
     .howto-ingredients li::before { content: '• '; color: var(--red); font-weight: bold; }
 
     .steps { display: flex; flex-direction: column; gap: 0; }
 
     .step {
-      display: flex; gap: 1.5rem; padding: 1.5rem 0;
+      display: flex; gap: 1.5rem; padding: 1.5rem 1rem;
       border-bottom: 2px dashed rgba(0,0,0,0.08); align-items: center;
+      border-radius: 12px;
+      transition: background 0.25s, transform 0.25s;
+    }
+
+    .step:hover {
+      background: rgba(212,44,44,0.04);
+      transform: translateX(6px);
     }
 
     .step:last-of-type { border-bottom: none; }
@@ -360,7 +393,7 @@
       display: flex; align-items: center; justify-content: center; flex-shrink: 0;
     }
 
-    .step-text { font-size: 1.05rem; line-height: 1.6; color: #555; }
+    .step-text { font-size: 1.05rem; line-height: 1.6; color: #4a4a4a; }
 
     .step-final {
       text-align: center; padding: 2rem 0 0;
@@ -402,6 +435,14 @@
 
     .notify-form button:hover { background: var(--red-dark); }
 
+    .notify-form input:focus-visible {
+      outline: none; box-shadow: inset 0 0 0 2px var(--red);
+    }
+
+    .notify-form button:focus-visible {
+      outline: 2px solid var(--yellow); outline-offset: 2px;
+    }
+
     .notify-success {
       display: none; font-family: var(--font-display);
       font-size: 1.5rem; color: var(--yellow); margin-top: 1rem;
@@ -418,9 +459,17 @@
     .footer-social a {
       font-family: var(--font-display); font-size: 1.1rem;
       color: var(--red); text-decoration: none; text-transform: uppercase;
+      padding: 0.4rem 1.2rem; border: 2px solid var(--red); border-radius: 50px;
+      transition: background 0.25s, color 0.25s, transform 0.25s;
+      display: inline-block;
     }
 
-    .footer-social a:hover { text-decoration: underline; }
+    .footer-social a:hover {
+      background: var(--red); color: var(--white);
+      transform: scale(1.05);
+    }
+
+    .footer-social a:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }
 
     .footer-tagline {
       font-family: var(--font-display); color: #999; font-size: 0.85rem;
@@ -436,6 +485,17 @@
     }
 
     .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ─── REDUCED MOTION ─── */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      .reveal { opacity: 1; transform: none; }
+      .flying-emoji { display: none !important; }
+    }
 
     /* ─── RESPONSIVE ─── */
     @media (max-width: 900px) {
@@ -668,7 +728,7 @@
       <a href="https://instagram.com/mazsburgers" target="_blank" rel="noopener">@mazsburgers</a>
     </div>
     <p class="footer-tagline">"Just the Classics" · Est. 2024</p>
-    <p class="footer-copy">&copy; 2025 Maz's Burgers. Pop-up smash burgers by Chef Mazin Kanuga.</p>
+    <p class="footer-copy">&copy; 2026 Maz's Burgers. Pop-up smash burgers by Chef Mazin Kanuga.</p>
   </footer>
 
   <script>
