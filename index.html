@@ -1566,11 +1566,6 @@
           </div>
         </div>
 
-        <button class="season-cta" id="buyBottle">
-          Add to cart · $15
-          <span class="arr"></span>
-        </button>
-
         <div class="charity-note">100% of proceeds go to charity</div>
       </div>
     </div>
@@ -1739,9 +1734,7 @@
     <div class="foot-col">
       <h4>Follow</h4>
       <ul>
-        <li><a href="#">@mazsburgers</a></li>
-        <li><a href="#">Tiktok</a></li>
-        <li><a href="#">Press inquiries</a></li>
+        <li><a href="https://www.instagram.com/mazsburgers" target="_blank" rel="noopener">@mazsburgers</a></li>
       </ul>
     </div>
   </div>
@@ -1801,13 +1794,10 @@
 
   /* ─────────── SEASONING OPTIONS ─────────── */
   const opts = document.querySelectorAll('#seasonOpts .season-opt');
-  const buyBtn = document.getElementById('buyBottle');
   opts.forEach(o => {
     o.addEventListener('click', () => {
       opts.forEach(x => x.classList.remove('active'));
       o.classList.add('active');
-      const price = o.dataset.qty === '1' ? '10' : '15';
-      buyBtn.firstChild.textContent = 'Add to cart · $' + price;
     });
   });
 
